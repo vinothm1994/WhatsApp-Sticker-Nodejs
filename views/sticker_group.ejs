@@ -1,0 +1,83 @@
+<html>
+
+<head>
+    <title>Sticker Group Name</title>
+    <style type="text/css">
+        body {
+        }
+        #shade, #modal {
+            display: none;
+        }
+        #shade {
+            position: fixed;
+            z-index: 100;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #modal {
+            position: fixed;
+            z-index: 101;
+            top: 33%;
+            left: 25%;
+            width: 50%;
+        }
+
+        #shade {
+            background: silver;
+            opacity: 0.5;
+            filter: alpha(opacity=50);
+        }
+    </style>
+</head>
+
+<body>
+<h1>Sticker</h1>
+<div id="shade" style="background-color: rgba(0,0,0,0.75)"></div>
+<div id="modal">
+    <form method="post" action=/apps/<%= appId %>/group/<%= groupId %>/upload_image enctype="multipart/form-data">
+        <input type="file" name="image" multiple>
+        <input type="submit"/>
+    </form>
+    <button type="button" id="close">Close</button>
+</div>
+<button id="start">Add Sticker</button>
+<script type="text/javascript">
+    var modal = document.getElementById('modal');
+    var shade = document.getElementById('shade');
+    document.getElementById('start').onclick = function () {
+        modal.style.display = shade.style.display = 'block';
+    };
+    document.getElementById('close').onclick = function () {
+        modal.style.display = shade.style.display = 'none';
+    };
+
+    // This code is a workaround for IE6's lack of support for the
+    // position: fixed style.
+    //
+    if (!('maxHeight' in document.body.style)) {
+        function modalsize() {
+            var top = document.documentElement.scrollTop;
+            var winsize = document.documentElement.offsetHeight;
+            var docsize = document.documentElement.scrollHeight;
+            shade.style.height = Math.max(winsize, docsize) + 'px';
+            modal.style.top = top + Math.floor(winsize / 3) + 'px';
+        }
+
+        modal.style.position = shade.style.position = 'absolute';
+        window.onscroll = window.onresize = modalsize;
+        modalsize();
+    }
+</script>
+<div style="display: flex;justify-content: space-evenly;">
+<% appDatas.forEach(function (appdata) { %>
+    <div style="padding: 10px 10px; background-color: gray">
+        <img width="100" height="100" src=<%= appdata.file_url %>>
+        <div style="text-align: center"><a href=/apps/<%= appdata.id %>/group>delete</a></div>
+    </div>
+<% }) %>
+</div>
+</body>
+</html>

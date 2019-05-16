@@ -1,0 +1,85 @@
+<html>
+<head>
+    <title>Apps</title>
+    <style type="text/css">
+        body {
+
+        }
+
+        #shade, #modal {
+            display: none;
+        }
+
+        #shade {
+            position: fixed;
+            z-index: 100;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #modal {
+            position: fixed;
+            z-index: 101;
+            top: 33%;
+            left: 25%;
+            width: 50%;
+        }
+
+        #shade {
+            background: silver;
+            opacity: 0.5;
+            filter: alpha(opacity=50);
+        }
+    </style>
+    <h1>StickerGroups</h1>
+</head>
+<body>
+<div id="shade" style="background-color: rgba(0,0,0,0.75)"></div>
+<div id="modal">
+    <form method="POST" action=/apps/<%= appId %>/group/add>
+        <div class="form-group"><label>Group Name:</label><input type="text" placeholder="" name="name">
+            <button type="submit">Add</button>
+        </div>
+    </form>
+    <button type="button" id="close">Close</button>
+</div>
+<button id="start">Add Sticker Group</button>
+<script type="text/javascript">
+    var modal = document.getElementById('modal');
+    var shade = document.getElementById('shade');
+    document.getElementById('start').onclick = function () {
+        modal.style.display = shade.style.display = 'block';
+    };
+    document.getElementById('close').onclick = function () {
+        modal.style.display = shade.style.display = 'none';
+    };
+
+    // This code is a workaround for IE6's lack of support for the
+    // position: fixed style.
+    //
+    if (!('maxHeight' in document.body.style)) {
+        function modalsize() {
+            var top = document.documentElement.scrollTop;
+            var winsize = document.documentElement.offsetHeight;
+            var docsize = document.documentElement.scrollHeight;
+            shade.style.height = Math.max(winsize, docsize) + 'px';
+            modal.style.top = top + Math.floor(winsize / 3) + 'px';
+        }
+
+        modal.style.position = shade.style.position = 'absolute';
+        window.onscroll = window.onresize = modalsize;
+        modalsize();
+    }
+</script>
+<% appDatas.forEach(function (appdata) { %>
+    <div>
+        <span><%= appdata.name %></span>
+        <a href=/apps/<%= appId %>/group/<%= appdata.id %> > add/edit</a>
+        <a href=/apps/<%= appId %>/group/<%= appdata.id %>> delete</a>
+    </div>
+<% }) %>
+</body>
+</html>
+
