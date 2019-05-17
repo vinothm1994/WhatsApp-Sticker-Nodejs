@@ -28,34 +28,39 @@ const connection = dbConnection();
 // get sticker_group
 router.get('/stickers', function (req, res, next) {
     let appId = req.params.appId;
-    let groupId = req.params.id;
-    console.log(appId);
-    connection.query('SELECT sticker_group.id,sticker_group.name ,sticker.file_name, sticker.file_url,sticker.size ' +
+    let baseUrl = req.protocol + "://" + req.headers.host;
+    connection.query('SELECT sticker_group.id,sticker_group.name,sticker_group.image_path,sticker.id AS sticker_id ,sticker.file_name, sticker.file_url,sticker.size ' +
         'FROM ' +
         '`sticker_group`,`sticker` WHERE sticker_group.id=sticker.group_id',
         (err, result) => {
-            var datas = {};
+            var stickerGroupswithId = {};
             result.forEach(function (item) {
-                let datum = datas[item.id];
-                if (datum == null) {
-                    datum = {
+                let group = stickerGroupswithId[item.id];
+                if (group == null) {
+                    let trayPath = baseUrl + item.image_path.replace('uploads', "");
+                    group = {
                         id: item.id,
                         name: item.name,
-                        sticker: []
+                        tray_image_url: trayPath,
+                        size: 0,
+                        stickers: []
                     };
-                    datas[item.id] = datum;
+                    stickerGroupswithId[item.id] = group;
                 }
+                var filePath = item.file_url.replace('uploads', "");
+                group.size = group.size + item.size;
                 var obj = {
                     file_name: item.file_name,
-                    file_url: item.file_url,
-
+                    file_url: baseUrl + filePath,
                 };
-                datum.sticker.push(obj);
+                group.stickers.push(obj);
             });
-
-
-
-            res.send(datas);
+            var arr = [];
+            for (element in stickerGroupswithId) {
+                arr.push(stickerGroupswithId[element]);
+            }
+            res.statusCode=200;
+            res.json(arr);
 
 
         });
