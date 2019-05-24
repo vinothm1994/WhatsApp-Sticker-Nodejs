@@ -1,7 +1,8 @@
 const mysql = require('mysql');
-var env = process.env.NODE_ENV || 'development';
+var ENV_DEV="development";
+var env = process.env.NODE_ENV || ENV_DEV;
 console.log("mode:"+env);
-if (env === "development") {
+if (env === ENV_DEV) {
     module.exports = function () {
         return mysql.createConnection({
             host: 'localhost',
