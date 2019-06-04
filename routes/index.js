@@ -26,7 +26,7 @@ router.post("/login", function (req, res, next) {
                 req.session.userId = result[0].id;
                 res.redirect("/apps")
             } else {
-                res.send("invalid password");
+                res.send("Invalid Email Id or Password");
             }
             console.log(result);
         });
@@ -89,6 +89,7 @@ router.get('/apps/:appId/stickers', function (req, res, next) {
                 var filePath = item.file_url.replace('uploads', "");
                 group.size = group.size + item.size;
                 var obj = {
+                    sticker_id: item.sticker_id,
                     file_name: item.file_name,
                     file_url: baseUrl + filePath,
                 };
@@ -101,6 +102,14 @@ router.get('/apps/:appId/stickers', function (req, res, next) {
             res.status(200);
             res.json(arr);
         });
+});
+
+
+
+router.get("/logout", function (req, res, next) {
+    req.session.destroy();
+    res.redirect("/login");
+
 });
 
 

@@ -8,6 +8,26 @@
 </head>
 <body>
 
+<script type="application/javascript">
+
+    function removed(ss) {
+        console.log("removevev" + ss);
+        var result = false;
+        //http://localhost:3000/apps/15/group/32/sticker/1
+        $.ajax({
+            url: '/script.cgi',
+            type: 'DELETE',
+            success: function (resp) {
+                result = resp;
+                // Do something with the result
+            }
+        });
+
+        return result;
+    }
+
+</script>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
     <div class="container">
         <a class="navbar-brand" href="#">
@@ -19,14 +39,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-
                 <li class="nav-item active">
                     <a class="nav-link" href="#">Home
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
+                    <a id="logout_btn" class="nav-link" href="/logout">Logout</a>
                 </li>
 
             </ul>
@@ -85,11 +104,11 @@
     <div class="d-flex flex-wrap container">
         <% appDatas.forEach(function (appdata) { %>
             <div style="padding: 10px 10px;" class="card m-1">
-                <a class="text-right" href="#">
-                    <img class="text-right" width="20" height="20" src="https://img.icons8.com/metro/26/000000/waste.png">
+                <a class="text-right invisible" href=sticker/<%= appdata.id %> >
+                    <img class="text-right" width="20" height="20"
+                         src="https://img.icons8.com/metro/26/000000/waste.png">
                 </a>
                 <img width="100" height="100" src=<%= appdata.file_url %>>
-                <!--                <div style="text-align: center"><a href=/delete/<%= appdata.id %>/>delete</a></div>-->
             </div>
         <% }) %>
     </div>
