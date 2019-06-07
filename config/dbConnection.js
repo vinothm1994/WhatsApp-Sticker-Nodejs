@@ -22,5 +22,10 @@ if (env === ENV_DEV) {
     };
 }
 
+// aws rds =>root vinothm.1994
+//db name sticker
+//./mysql -u root -h wastickerdb.conasvout0om.ap-south-1.rds.amazonaws.com -P 3306 -D sticker -p
+
+
 
 

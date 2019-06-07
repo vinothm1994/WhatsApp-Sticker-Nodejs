@@ -105,6 +105,13 @@ router.get('/apps/:appId/stickers', function (req, res, next) {
 });
 
 
+router.get("/app_version",function (req, res, next) {
+    connection.query("SELECT version_name,version_code  FROM `app_version",(err, result) => {
+        res.status(200);
+        res.json(result[0]);
+    });
+
+});
 
 router.get("/logout", function (req, res, next) {
     req.session.destroy();

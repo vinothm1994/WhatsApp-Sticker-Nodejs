@@ -1,5 +1,5 @@
 var config={
-    sessionSecret:"dssss"
+    sessionSecret:"12345678"
 };
 
 module.exports=config;
